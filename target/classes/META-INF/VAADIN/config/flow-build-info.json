@@ -1,0 +1,17 @@
+{
+  "productionMode": false,
+  "eagerServerLoad": false,
+  "npmFolder": "C:\\Users\\AERO\\Documents\\workspaces\\web_workspace\\my-todo",
+  "node.version": "v20.11.1",
+  "node.download.root": "https://nodejs.org/dist/",
+  "frontendFolder": "C:\\Users\\AERO\\Documents\\workspaces\\web_workspace\\my-todo\\frontend",
+  "connect.javaSourceFolder": "C:\\Users\\AERO\\Documents\\workspaces\\web_workspace\\my-todo\\src\\main\\java",
+  "javaResourceFolder": "C:\\Users\\AERO\\Documents\\workspaces\\web_workspace\\my-todo\\src\\main\\resources",
+  "connect.applicationProperties": "C:\\Users\\AERO\\Documents\\workspaces\\web_workspace\\my-todo\\src\\main\\resources\\application.properties",
+  "connect.openApiFile": "C:\\Users\\AERO\\Documents\\workspaces\\web_workspace\\my-todo\\target\\generated-resources\\openapi.json",
+  "project.frontend.generated": "C:\\Users\\AERO\\Documents\\workspaces\\web_workspace\\my-todo\\frontend\\generated",
+  "pnpm.enable": false,
+  "bun.enable": false,
+  "require.home.node": false,
+  "build.folder": "target"
+}
