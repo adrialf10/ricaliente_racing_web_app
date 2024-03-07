@@ -1,0 +1,29 @@
+vaadin-button.fast {
+  	background-color: green;
+    color: white;
+    border-radius: 50%;
+    width: 100px;
+    height: 100px;
+    text-align: center;
+    cursor: grab;
+}
+
+vaadin-button.slow {
+  	background-color: red;
+    color: white;
+    border-radius: 50%;
+    width: 100px;
+    height: 100px;
+    text-align: center;
+    cursor: grab;
+}
+
+vaadin-button.no_info {
+	background-color: blue;
+    color: white;
+    border-radius: 50%;
+    width: 100px;
+    height: 100px;
+    text-align: center;
+    cursor: grab;
+}
