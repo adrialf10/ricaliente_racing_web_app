@@ -1,5 +1,7 @@
 package com.example.application.views.main;
 
+import java.util.Stack;
+
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.UI;
@@ -25,17 +27,22 @@ import com.vaadin.flow.server.VaadinSession;
 @PageTitle("Ricaliente Racing") 
 @Route("") 
 public class MainView extends HorizontalLayout { 
-
+	
 	public MainView() {
 		setWidth("100%");
 		setHeight("100%");
 
-		TextField numberField = new TextField("Enter a list of numbers (comma-separated):");
-		Button generateButton = new Button("Generate Buttons");
+		TextField kartsInput = new TextField("Enter the numbers of the karts (comma-separated)");
+		
+		TextField boxRowInput = new TextField("Enter the number of rows in box");
+		TextField boxKartsInput = new TextField("Enter the number of karts per row in box");
+		
+		Button generateButton = new Button("Generate Race");
 
 		generateButton.addClickListener(input_kart_numbers -> {
-			String input = numberField.getValue();
+			String input = kartsInput.getValue();
 			String[] kartsList = input.split(",");
+			Stack boxes = new Stack();
 			
 			int remainingButtons = kartsList.length;
 
@@ -52,7 +59,7 @@ public class MainView extends HorizontalLayout {
 			//add(layout);
 		});
 
-		add(numberField, generateButton);
+		add(kartsInput, generateButton);
 	}
 	
 	private VerticalLayout createKartsVerticalLayout(String[] kartsList, int kartsNumber) {
