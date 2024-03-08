@@ -1,7 +1,8 @@
 package com.example.application.views.main;
 
-import java.util.Stack;
+import java.util.List;
 
+import com.example.application.data.entity.Kart;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.UI;
@@ -28,48 +29,40 @@ import com.vaadin.flow.server.VaadinSession;
 @Route("") 
 public class MainView extends HorizontalLayout { 
 	
+	private final int KARTS_PER_COLUMN = 5;
+	
 	public MainView() {
 		setWidth("100%");
 		setHeight("100%");
-
-		TextField kartsInput = new TextField("Enter the numbers of the karts (comma-separated)");
 		
-		TextField boxRowInput = new TextField("Enter the number of rows in box");
-		TextField boxKartsInput = new TextField("Enter the number of karts per row in box");
+		TextField numberField = new TextField("Enter a list of numbers (comma-separated):");
+		Button generateButton = new Button("Generate Buttons");
 		
-		Button generateButton = new Button("Generate Race");
-
 		generateButton.addClickListener(input_kart_numbers -> {
-			String input = kartsInput.getValue();
+			String input = numberField.getValue();
 			String[] kartsList = input.split(",");
-			Stack boxes = new Stack();
 			
-			int remainingButtons = kartsList.length;
-
-	        while (remainingButtons > 0) {
-				VerticalLayout layout = createKartsVerticalLayout(kartsList, remainingButtons);
-	
-				add(layout);
-				
-				remainingButtons -= layout.getChildren().count();
-	        }
+			List<Kart> raceKarts = ;
+			Stack>
+			
+			int totalKarts = kartsList.length;
+	        int layoutCount = (int) Math.ceil((double) totalKarts / KARTS_PER_COLUMN);
 	        
-			//VerticalLayout layout = createKartsVerticalLayout(kartsList, kartsList.length);
-			
-			//add(layout);
+			for (int i = 0; i < layoutCount; i++) {
+				VerticalLayout layout = createKartsVerticalLayout(kartsList, i);
+				add(layout);
+			}
 		});
 
-		add(kartsInput, generateButton);
+		add(numberField, generateButton);
 	}
 	
-	private VerticalLayout createKartsVerticalLayout(String[] kartsList, int kartsNumber) {
+	private VerticalLayout createKartsVerticalLayout(String[] kartsList, int layoutIndex) {
 		VerticalLayout layout = new VerticalLayout();
 		layout.setWidth("100%");
 		layout.setHeight("100%");
 		
-		int buttonsToAdd = calculateButtonsToAdd(layout, kartsNumber);
-		
-		for (int i = 0; i < buttonsToAdd; i++) {
+		for (int i = layoutIndex * KARTS_PER_COLUMN; i < Math.min((layoutIndex + 1) * KARTS_PER_COLUMN, kartsList.length); i++) {
 			Button button = createKartsButtons(kartsList[i]);
 
 			layout.add(button);
@@ -90,32 +83,6 @@ public class MainView extends HorizontalLayout {
 		contextMenu.addItem("fast", color_event -> button.setClassName("fast"));
 		contextMenu.addItem("slow", color_event -> button.setClassName("slow"));
 		
-		UI.getCurrent().getPage().retrieveExtendedClientDetails(details -> {
-            System.out.println("Width " + details.getWindowInnerWidth());
-            System.out.println("Height " + details.getWindowInnerHeight());
-        });
-		
 		return button;
-	}
-
-	private int calculateButtonsToAdd(VerticalLayout layout, int remainingButtons) {
-		int buttonsPerLayout = 0;
-		int buttonHeight = 100; // Height of each button in pixels (adjust as needed)
-		
-		int layoutHeight = getBrowserDimension();// Get the height of the browser window
-
-		while (buttonsPerLayout * buttonHeight < layoutHeight && buttonsPerLayout < remainingButtons) {
-			buttonsPerLayout++;
-		}
-
-		return buttonsPerLayout;
-	}
-	
-	private int getBrowserDimension() {
-		UI.getCurrent().getPage().retrieveExtendedClientDetails(evt -> {
-			final int height = evt.getWindowInnerHeight();
-			
-		});
-		return 911;
 	}
 }
