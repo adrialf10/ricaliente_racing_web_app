@@ -2,8 +2,8 @@ vaadin-button.fast {
   	background-color: green;
     color: white;
     border-radius: 50%;
-    width: 100px;
-    height: 100px;
+    width: 80px;
+    height: 80px;
     text-align: center;
     cursor: grab;
 }
@@ -12,8 +12,8 @@ vaadin-button.slow {
   	background-color: red;
     color: white;
     border-radius: 50%;
-    width: 100px;
-    height: 100px;
+    width: 80px;
+    height: 80px;
     text-align: center;
     cursor: grab;
 }
@@ -22,8 +22,34 @@ vaadin-button.no_info {
 	background-color: blue;
     color: white;
     border-radius: 50%;
+    width: 80px;
+    height: 80px;
+    text-align: center;
+    cursor: grab;
+}
+
+vaadin-vertical-layout.boxes {
+    background-color: lightgrey;
+}
+
+.draggable-button {
+    background-color: red;
+    color: white;
+    border-radius: 50%;
     width: 100px;
     height: 100px;
     text-align: center;
+    line-height: 100px; /* Align text vertically */
     cursor: grab;
+}
+
+.buttons-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+/* Optional: add hover effect */
+.draggable-button:hover {
+    opacity: 0.8;
 }

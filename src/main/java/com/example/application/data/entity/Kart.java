@@ -3,18 +3,18 @@ package com.example.application.data.entity;
 public class Kart {
     private String number;
     private String name;
-    private String status;
+    private SpeedType speedType;
     
     public Kart() {
     	this.number = "";
         this.name = "";
-        this.status = "no_info";
+        this.speedType = SpeedType.NO_INFO;
     }
     
     public Kart(String number) {
         this.number = number;
         this.name = "";
-        this.status = "no_info";
+        this.speedType = SpeedType.NO_INFO;
     }
 
     public String getNumber() {
@@ -33,11 +33,22 @@ public class Kart {
         this.name = name;
     }
 
-    public String getStatus() {
-        return status;
+    public SpeedType getSpeedType() {
+        return speedType;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setSpeedType(SpeedType speedType) {
+        this.speedType = speedType;
+    }
+    
+    public enum SpeedType {
+        FAST,
+        SLOW,
+        NO_INFO;
+        
+        @Override
+        public String toString() {
+            return name().toLowerCase();
+        }
     }
 }
