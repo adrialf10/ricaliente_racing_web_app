@@ -1,21 +1,32 @@
 package com.example.application.data.entity;
 
 public class Kart {
+	private Integer id;
     private String number;
     private String name;
     private SpeedType speedType;
     
-    public Kart() {
+	public Kart() {
+    	//this.id = id;
     	this.number = "";
         this.name = "";
         this.speedType = SpeedType.NO_INFO;
     }
     
     public Kart(String number) {
-        this.number = number;
+    	//this.id = id;
+    	this.number = number;
         this.name = "";
         this.speedType = SpeedType.NO_INFO;
     }
+    
+    public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
 
     public String getNumber() {
         return number;

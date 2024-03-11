@@ -33,7 +33,7 @@ import com.vaadin.flow.server.VaadinSession;
 @PageTitle("Ricaliente Racing") 
 @Route("") 
 public class MainView extends HorizontalLayout { 
-	/*	
+	
 	public MainView() {
 		TextField kartsInput = new TextField("Enter the numbers of the karts (comma-separated)");
 		NumberField boxInput = new NumberField("Enter the number of karts per row in box");
@@ -43,18 +43,11 @@ public class MainView extends HorizontalLayout {
 			String kartNumbers = kartsInput.getValue();
 			Double boxLimit = boxInput.getValue();
 			
-            String concatenatedValues = kartNumbers + ";" + boxLimit;
-            String[] paramaters = concatenatedValues.split(";");
+            String paramaters = kartNumbers + ";" + boxLimit;
             
-            getUI().ifPresent(ui -> ui.navigate(RaceView.class));
-            
+            getUI().ifPresent(ui -> ui.navigate(RaceView.class, paramaters)); 
         });
 
         add(kartsInput, boxInput, generateButton);
-    }*/
-	
-
-    public MainView() {
-
     }
 }

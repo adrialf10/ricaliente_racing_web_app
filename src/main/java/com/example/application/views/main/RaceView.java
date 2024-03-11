@@ -27,136 +27,161 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.NumberField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.provider.DataProvider;
+import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEvent;
+import com.vaadin.flow.router.HasUrlParameter;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.VaadinSession;
 
 @PageTitle("Ricaliente Racing") 
 @Route("Race") 
-public class RaceView extends HorizontalLayout { 
-	
+public class RaceView extends HorizontalLayout implements HasUrlParameter<String>{ 
+
 	private final int KARTS_PER_COLUMN = 5;
+
+	private List<Kart> kartsLineup;
 	
-	List<Kart> kartsLineup = new ArrayList<Kart>();
-	LinkedList<Kart> leftBox = new LinkedList<Kart>();
-	LinkedList<Kart> rightBox = new LinkedList<Kart>();
-    
-    VerticalLayout leftBoxLayout = null;
-    VerticalLayout rightBoxLayout = null;	
-    
-    Double boxLimit = 0.0;
-    
-    
-	public RaceView() {		
-		TextField kartsInput = new TextField("Enter the numbers of the karts (comma-separated)");
-		NumberField boxInput = new NumberField("Enter the number of karts per row in box");
-		Button generateButton = new Button("Start Race");
+	private LinkedList<Kart> leftBox;
+	private LinkedList<Kart> rightBox;
+
+	private VerticalLayout leftBoxLayout;
+	private VerticalLayout rightBoxLayout;	
+
+	private Double boxLimit;
+	
+	public RaceView() {
+		this.kartsLineup = new ArrayList<Kart>();
 		
-        add(kartsInput, boxInput, generateButton);
-		
-		generateButton.addClickListener(start_race -> {
-			// Create karts lineup			
-			String[] kartNumbers = kartsInput.getValue().split(",");
-					
-	        for (String number : kartNumbers) {
-	        	kartsLineup.add(new Kart(number));
-	        }
-	        
-	        int lineuplayoutCount = (int) Math.ceil((double) kartsLineup.size() / KARTS_PER_COLUMN);
-			for (int i = 0; i < lineuplayoutCount; i++) {
-				VerticalLayout lineupLayout = createKartsLineupVerticalLayout(i);
-				add(lineupLayout);
-			}
-			
-			// Create boxes
-			boxLimit = boxInput.getValue();
-			
-			for (int i = 0; i < boxLimit; i++) {
-				leftBox.add(new Kart());
-				rightBox.add(new Kart());
-			}
-					       	        
-			leftBoxLayout = createBoxesVerticalLayout(leftBox, boxLimit);
-			rightBoxLayout = createBoxesVerticalLayout(rightBox, boxLimit);
-				
-			add(leftBoxLayout);
-			add(rightBoxLayout);
-		});
+		this.leftBox = new LinkedList<Kart>();
+		this.rightBox = new LinkedList<Kart>();
+
+		this.leftBoxLayout = null;
+		this.rightBoxLayout = null;	
+
+		this.boxLimit = 0.0;
+    }
+	
+	@Override
+	public void setParameter(BeforeEvent event, String parameter) {
+		String[] params = parameter.split(";");
+
+		// Create karts lineup
+		String[] kartNumbers = params[0].split(",");
+		for (String number : kartNumbers) {
+			kartsLineup.add(new Kart(number));
+		}
+
+		// Create boxes
+		boxLimit = Double.parseDouble(params[1]);		
+		for (int i = 0; i < boxLimit; i++) {
+			leftBox.add(new Kart());
+			rightBox.add(new Kart());
+		}
+
+		executeRaceView();
 	}
 		
+	public void executeRaceView() {
+		int lineuplayoutCount = (int) Math.ceil((double) kartsLineup.size() / KARTS_PER_COLUMN);
+		for (int i = 0; i < lineuplayoutCount; i++) {
+			VerticalLayout lineupLayout = createKartsLineupVerticalLayout(i);
+			add(lineupLayout);
+		}
+
+		leftBoxLayout = createBoxesVerticalLayout(leftBox, boxLimit);
+		rightBoxLayout = createBoxesVerticalLayout(rightBox, boxLimit);
+
+		add(leftBoxLayout);
+		add(rightBoxLayout);
+	}
+
 	private VerticalLayout createBoxesVerticalLayout(LinkedList<Kart> box, double boxLimit) {
 		VerticalLayout layout = new VerticalLayout();
 		layout.setAlignItems(Alignment.CENTER);
 		layout.addClassName("boxes");
-		
+
 		for(Kart boxKart : box) {
 			Button button = createBoxButtons(boxKart);
 			layout.add(button);
 		}
-		
+
 		return layout;
 	}
-	
+
 	private VerticalLayout createKartsLineupVerticalLayout(int layoutIndex) {
 		VerticalLayout layout = new VerticalLayout();	
 		layout.setAlignItems(Alignment.CENTER);
-		
+
 		for (int i = layoutIndex * KARTS_PER_COLUMN; i < Math.min((layoutIndex + 1) * KARTS_PER_COLUMN, kartsLineup.size()); i++) {
-			Button button = createKartsButtons(kartsLineup.get(i));
-			
+			Button button = createKartsButtons(i);
+
 			layout.add(button);
 		}
 
 		return layout;
 	}
 
-	private Button createKartsButtons(Kart kart) {
-		Button button = new Button("Kart " + kart.getNumber());
-		button.addClassName(kart.getSpeedType().toString());
+	private Button createKartsButtons(int kartIndex) {
+		Kart initialKart = kartsLineup.get(kartIndex);
+		
+		Button button = new Button("Kart " + initialKart.getNumber());
+		button.addClassName(initialKart.getSpeedType().toString());
 
 		ContextMenu contextMenu = new ContextMenu();
 		contextMenu.setOpenOnClick(true);
 		contextMenu.setTarget(button);
 
 		contextMenu.addItem("Sin información", selection -> {
-			kart.setSpeedType(SpeedType.NO_INFO);
+			kartsLineup.get(kartIndex).setSpeedType(SpeedType.NO_INFO);
 			button.setClassName(SpeedType.NO_INFO.toString());
 		});
 		contextMenu.addItem("Rápido", selection -> {
-			kart.setSpeedType(SpeedType.FAST);
+			kartsLineup.get(kartIndex).setSpeedType(SpeedType.FAST);
 			button.setClassName(SpeedType.FAST.toString());
 		});
 		contextMenu.addItem("Lento", selection -> {
-			kart.setSpeedType(SpeedType.SLOW);
+			kartsLineup.get(kartIndex).setSpeedType(SpeedType.SLOW);
 			button.setClassName(SpeedType.SLOW.toString());
 		});
 		contextMenu.addItem("Box Izquierda", selection -> {
+			Kart kartIn = kartsLineup.get(kartIndex);
 			Kart kartOut = leftBox.poll();
-			leftBox.addLast(kart);
-					
-			kartsLineup.set(kartsLineup.indexOf(kart), kartOut);
-			button.setClassName(kartOut.getSpeedType().toString());
+						
+			kartOut.setNumber(kartIn.getNumber());
 			
+			kartsLineup.set(kartIndex, kartOut);
+			
+			kartIn.setNumber("");
+			leftBox.addLast(kartIn);
+			
+			button.setClassName(kartOut.getSpeedType().toString());
+
 			VerticalLayout newLayout = createBoxesVerticalLayout(leftBox, boxLimit);
 			replace(leftBoxLayout, newLayout);
 			leftBoxLayout = newLayout;
 		});
 		contextMenu.addItem("Box Derecha", selection -> {
+			Kart kartIn = kartsLineup.get(kartIndex);
 			Kart kartOut = rightBox.poll();
-			rightBox.addLast(kart);
 			
-			kartsLineup.set(kartsLineup.indexOf(kart), kartOut);
+			kartOut.setNumber(kartIn.getNumber());
+			
+			kartsLineup.set(kartIndex, kartOut);
+			
+			kartIn.setNumber("");
+			rightBox.addLast(kartIn);
+			
 			button.setClassName(kartOut.getSpeedType().toString());
-			
+
 			VerticalLayout newLayout = createBoxesVerticalLayout(rightBox, boxLimit);
 			replace(rightBoxLayout, newLayout);
 			rightBoxLayout = newLayout;
 		});
-		
+
 		return button;
 	}
-	
+
 	private Button createBoxButtons(Kart kart) {
 		Button button = new Button("Kart");
 		button.addClassName(kart.getSpeedType().toString());
@@ -177,7 +202,7 @@ public class RaceView extends HorizontalLayout {
 			kart.setSpeedType(SpeedType.SLOW);
 			button.setClassName(SpeedType.SLOW.toString());
 		});
-		
+
 		return button;
 	}
 }
