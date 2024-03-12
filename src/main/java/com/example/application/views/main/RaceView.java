@@ -112,7 +112,8 @@ public class RaceView extends HorizontalLayout implements HasUrlParameter<String
 	private VerticalLayout createKartsLineupVerticalLayout(int layoutIndex) {
 		VerticalLayout layout = new VerticalLayout();	
 		layout.setAlignItems(Alignment.CENTER);
-
+		layout.setMinWidth("80px");
+		
 		for (int i = layoutIndex * KARTS_PER_COLUMN; i < Math.min((layoutIndex + 1) * KARTS_PER_COLUMN, kartsLineup.size()); i++) {
 			Button button = createKartsButtons(i);
 
@@ -125,7 +126,7 @@ public class RaceView extends HorizontalLayout implements HasUrlParameter<String
 	private Button createKartsButtons(int kartIndex) {
 		Kart initialKart = kartsLineup.get(kartIndex);
 		
-		Button button = new Button("Kart " + initialKart.getNumber());
+		Button button = new Button(initialKart.getNumber());
 		button.addClassName(initialKart.getSpeedType().toString());
 
 		ContextMenu contextMenu = new ContextMenu();
@@ -185,6 +186,7 @@ public class RaceView extends HorizontalLayout implements HasUrlParameter<String
 	private Button createBoxButtons(Kart kart) {
 		Button button = new Button("Kart");
 		button.addClassName(kart.getSpeedType().toString());
+		
 
 		ContextMenu contextMenu = new ContextMenu();
 		contextMenu.setOpenOnClick(true);
