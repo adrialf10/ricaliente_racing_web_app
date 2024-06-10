@@ -68,7 +68,7 @@ public class MainView extends VerticalLayout {
 				notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
 			}
 			else if(!checkListInput(kartNumbers)) {
-				Notification notification = Notification.show("Maaan, tenías un trabajo, solo números naturales separados por comas y sin espacios.");
+				Notification notification = Notification.show("Maaan, solo tenías un trabajo, pon letras o números naturales separados por comas y sin espacios.");
 				notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
 			} 
 			else if(!isInteger(boxLimit)) {
@@ -125,7 +125,7 @@ public class MainView extends VerticalLayout {
 	}
 
 	private boolean checkListInput(String list) {
-		String regex = "^\\d+(,\\d+)*$";
+		String regex = "^[a-zA-Z0-9]+(,[a-zA-Z0-9]+)*$";
 
 		Pattern pattern = Pattern.compile(regex);
 
